@@ -1,24 +1,17 @@
-﻿#define GLFW_INCLUDE_NONE 
-#include <GLFW/glfw3.h>
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
+﻿#include "Window/Window.h"
 
 int main()
 {
-	if (!glfwInit())
+	Window* glfwWindow = new Window({ 800, 600 }, "FantasyEngine"); 
+
+	glfwWindow->Initialize();
+
+	while (glfwWindow->IsVisible())
 	{
-		abort(); 
+		glfwWindow->Run();
 	}
 
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	delete glfwWindow;
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "FantasyEngine", nullptr, nullptr); 
-
-	while(!glfwWindowShouldClose(window))
-	{
-		glfwPollEvents(); 
-	}
-	glfwTerminate(); 
 	return 0;
 }
