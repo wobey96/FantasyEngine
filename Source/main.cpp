@@ -1,17 +1,21 @@
 ﻿#include "Window/Window.h"
+#include "Renderer/Renderer.h"
+
 
 int main()
 {
-	Window* glfwWindow = new Window({ 800, 600 }, "FantasyEngine"); 
+	Window* basicWindow = new Window({ 800, 600 }, "FantasyEngine");  
 
-	glfwWindow->Initialize();
+	basicWindow->Initialize();
 
-	while (glfwWindow->IsVisible())
+	Renderer* basicRenderer = new Renderer(basicWindow);
+
+	while (basicWindow->IsVisible())
 	{
-		glfwWindow->Run();
+		basicWindow->Run();
 	}
 
-	delete glfwWindow;
+	delete basicWindow;
 
 	return 0;
 }
