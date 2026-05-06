@@ -13,9 +13,12 @@ int main()
 	while (basicWindow->IsVisible())
 	{
 		basicWindow->Run();
+		basicRenderer->ClearColor({ 0.0, 0.0, 1.0, 0.0 });
+		basicRenderer->Present(); 
 	}
 
 	delete basicWindow;
+	delete basicRenderer; 
 
 	return 0;
 }

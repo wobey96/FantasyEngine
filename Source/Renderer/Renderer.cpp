@@ -79,12 +79,15 @@ void Renderer::CreateRenderTargetView()
 	}
 }
 
-void Renderer::ClearColor(XMFLOAT3 color)
+void Renderer::ClearColor(XMFLOAT4 color)
 {
+	float clearColor[] = { color.x, color.y, color.z, color.w }; 
+	mDeviceContext->ClearRenderTargetView(mRenderTargetView.Get(), clearColor); 
 }
 
 void Renderer::Present()
 {
+	mSwapchain->Present(1, 0); 
 }
 
 
