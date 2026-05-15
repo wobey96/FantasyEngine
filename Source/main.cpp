@@ -4,13 +4,14 @@
 struct VertexData
 {
 	XMFLOAT3 position; 
+	XMFLOAT4 color; 
 };
 
 VertexData vertices[]  =
 {
-	{ XMFLOAT3(-0.5f, -0.5f, 0.0f) },
-	{ XMFLOAT3(0.0f, 0.5f, 0.0f) },
-	{ XMFLOAT3(0.5f, -0.5f, 0.0f) }
+	{ XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},
+	{ XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
 };
 
 uint32_t indicies[] =
