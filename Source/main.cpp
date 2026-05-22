@@ -5,14 +5,21 @@
 
 #include <vector>
 
-std::vector<VertexData> vertices =
+std::vector<VertexData> vertices1 =
 {
 	{ XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},
 	{ XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
 	{ XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
 };
 
-std::vector<uint32_t> indicies =
+std::vector<VertexData> vertices2 =
+{
+	{ XMFLOAT3(0.7f, 0.0f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},
+	{ XMFLOAT3(0.8f, 0.8f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+	{ XMFLOAT3(0.9f, 0.0f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
+};
+
+std::vector<uint32_t> indicies1 =
 {
 	0, 1, 2
 };
@@ -30,8 +37,11 @@ int main()
 	Renderer* basicRenderer = RendererManager::CreateRenderer(basicWindow);
 
 	// BASIC TRIANGLE INITIALIZATION
-	Object* triangle = new Object(vertices, indicies);
+	Object* triangle = new Object(vertices1, indicies1);
 	objects.push_back(triangle);
+
+	Object* triangle2 = new Object(vertices2, indicies1);
+	objects.push_back(triangle2);
 
 	// BASIC RENDER LOOP
 	while (basicWindow->IsVisible())
