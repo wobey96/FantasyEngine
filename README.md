@@ -14,7 +14,7 @@ I called it Fantasy Engine because graphics and engine programming allows you to
 
 ### Engine 
 
-## Engine Architecture 
+## Engine Architecture
 
 ## Repository Structure
 
