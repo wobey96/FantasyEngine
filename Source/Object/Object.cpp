@@ -23,7 +23,7 @@ Object::Object(std::vector<VertexData> pArrayVertexData, std::vector<uint32_t> i
 
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexData) * 3;
+	vertexBufferDesc.ByteWidth = sizeof(VertexData) * pArrayVertexData.size();
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -37,7 +37,7 @@ Object::Object(std::vector<VertexData> pArrayVertexData, std::vector<uint32_t> i
 
 	D3D11_BUFFER_DESC indexBufferDesc = {};
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(uint32_t) * 3;
+	indexBufferDesc.ByteWidth = sizeof(uint32_t) * indexData.size();
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;

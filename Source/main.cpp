@@ -13,11 +13,43 @@ std::vector<VertexData> vertices =
 	{ XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
 };
 
+std::vector<VertexData> vertices1 =
+{
+	{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},
+	{ XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)},
 
+	{ XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+	{ XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f) }
+};
 
 std::vector<uint32_t> indicies =
 {
 	0, 1, 2
+};
+
+std::vector<uint32_t> indicies1 =
+{
+	0, 1, 3,
+	1, 2, 3,
+
+	7, 5, 4,
+	7, 6, 5,
+
+	4, 5, 1,
+	4, 1, 0,
+
+	3, 2, 6,
+	3, 6, 7,
+
+	1, 5, 6,
+	1, 6, 2,
+
+	0, 3, 7,
+	0, 7, 4
 };
 
 int main()
@@ -26,27 +58,27 @@ int main()
 	std::vector<Object*> objects;
 
 	// BASIC WINDOW INITIALIZATION
-	Window* basicWindow = new Window({ 800, 600 }, "FantasyEngine");  
+	Window* basicWindow = new Window({ 1280, 720 }, "FantasyEngine");  
 	basicWindow->Initialize();
 
 	// BASIC RENDERER INITIALIZATION
 	Renderer* basicRenderer = RendererManager::CreateRenderer(basicWindow);
-	Camera* basicCamera = new Camera({0.0f, 0.0f, -3.0f});
 
-	// BASIC TRIANGLE INITIALIZATION
-	Object* triangle = new Object(vertices, indicies);
-	objects.push_back(triangle);
+	Camera* basicCamera = new Camera(XMFLOAT3(0.0f, 0.0f, 3.0f), { basicWindow->GetSize().X, basicWindow->GetSize().Y });
 
-	Object* triangle2 = new Object(vertices, indicies);
-	triangle2->SetPosition({ 3.0f, 2.0f, 1.0f });
-	objects.push_back(triangle2);
+	// BASIC CUBE INITIALIZATION
+	Object* cube = new Object(vertices1, indicies1);
+	objects.push_back(cube);
 
 	// BASIC RENDER LOOP
 	while (basicWindow->IsVisible())
 	{
 		basicWindow->Run();
 		basicRenderer->ClearColor({ 0.5f, 0.2f, 0.6f, 1.0f });
-		basicCamera->ProcessTransformPosition(basicWindow->GetWindowHandler());
+
+		basicCamera->HandleInput(basicWindow->GetWindowHandler());
+		basicCamera->UpdateMatrix(); 
+
 		basicRenderer->SetPipeline(); 
 
 		for (auto& object : objects)
