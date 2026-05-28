@@ -22,7 +22,7 @@ uint32_t indicies[] =
 
 int main()
 {
-	Window* basicWindow = new Window({ 800, 600 }, "FantasyEngine");  
+	Window* basicWindow = new Window({ 1280, 720 }, "FantasyEngine");  
 	basicWindow->Initialize();
 
 	Renderer* basicRenderer = new Renderer(basicWindow);
