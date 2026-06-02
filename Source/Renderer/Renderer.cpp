@@ -7,8 +7,10 @@ Renderer::Renderer(Window* pWindow) : mWindow(pWindow), mDevice(nullptr), mDevic
 mSwapchain(nullptr), mRenderTargetView(nullptr)
 {
 	CreateDevice(); 
+	Check4XMSAAQualitySupport(); 
 	CreateSwapchain(); 
 	CreateRenderTargetView(); 
+	CreateDepthStencilView(); 
 	CreateShaders();
 	CreateInputLayout(); 
 }
@@ -26,6 +28,11 @@ void Renderer::CreateDevice()
 	{
 		printf("Successfully created d3d11 device and context! \n"); 
 	}
+}
+
+void Renderer::Check4XMSAAQualitySupport()
+{
+	printf(" Check for 4X MSAA quality support goes here! \n"); 
 }
 
 void Renderer::CreateSwapchain()
@@ -73,11 +80,16 @@ void Renderer::CreateRenderTargetView()
 	{
 		printf("Failed to create render target view! \n");
 		abort(); 
-	}
+	}	
 	else
 	{
 		printf("Successfully created render target view! \n"); 
 	}
+}
+
+void Renderer::CreateDepthStencilView()
+{
+	printf(" Create Depth Stencil View here! \n"); 
 }
 
 void Renderer::CreateShaders()
