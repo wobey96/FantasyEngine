@@ -1,78 +1,112 @@
 ﻿#include "Window/Window.h"
-#include "Renderer/Renderer.h"
+#include "Renderer/RendererManager.h"
 
-struct VertexData
-{
-	XMFLOAT3 position; 
-	XMFLOAT4 color; 
-};
+#include "Object/Object.h"
+#include "Object/Camera.h"
+#include "Object/Timer.h"
 
-VertexData vertices[]  =
+#include <vector>
+
+std::vector<VertexData> vertices =
 {
 	{ XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},
 	{ XMFLOAT3(0.0f, 0.5f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
 	{ XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) }
 };
 
-uint32_t indicies[] =
+std::vector<VertexData> vertices1 =
+{
+	{ XMFLOAT3(-0.5f, -0.5f, -0.5f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},
+	{ XMFLOAT3(-0.5f, 0.5f, -0.5f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, 0.5f, -0.5f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)},
+
+	{ XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+	{ XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
+	{ XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f) }
+};
+
+std::vector<uint32_t> indicies =
 {
 	0, 1, 2
 };
 
+std::vector<uint32_t> indicies1 =
+{
+	0, 1, 3,
+	1, 2, 3,
+
+	7, 5, 4,
+	7, 6, 5,
+
+	4, 5, 1,
+	4, 1, 0,
+
+	3, 2, 6,
+	3, 6, 7,
+
+	1, 5, 6,
+	1, 6, 2,
+
+	0, 3, 7,
+	0, 7, 4
+};
 
 int main()
 {
+	// OBJECTS ARRAY
+	std::vector<Object*> objects;
+
+	// BASIC WINDOW INITIALIZATION
 	Window* basicWindow = new Window({ 1280, 720 }, "FantasyEngine");  
 	basicWindow->Initialize();
 
-	Renderer* basicRenderer = new Renderer(basicWindow);
+	// BASIC RENDERER INITIALIZATION
+	Renderer* basicRenderer = RendererManager::CreateRenderer(basicWindow);
 
-	ComPtr<ID3D11Buffer> vertexBuffer; 
-	D3D11_BUFFER_DESC vertexBufferDesc = {}; 
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT; 
-	vertexBufferDesc.ByteWidth = sizeof(VertexData) * 3; 
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER; 
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0; 
+	Camera* basicCamera = new Camera(XMFLOAT3(0.0f, 0.0f, 3.0f), { basicWindow->GetSize().X, basicWindow->GetSize().Y });
 
-	D3D11_SUBRESOURCE_DATA vertexSubresourceData = {}; 
-	vertexSubresourceData.pSysMem = vertices;
-	vertexSubresourceData.SysMemPitch = 0;
-	vertexSubresourceData.SysMemSlicePitch = 0;
+	// BASIC CUBE INITIALIZATION
+	Object* cube = new Object(vertices1, indicies1);
+	objects.push_back(cube);
 
-	basicRenderer->GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexSubresourceData, vertexBuffer.GetAddressOf());
+	// Timer for calc delta time and elapsed time 
+	Timer gameTimer; 
 
-	ComPtr<ID3D11Buffer> indexBuffer;
-	D3D11_BUFFER_DESC indexBufferDesc = {};
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(uint32_t) * 3;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA indexSubresourceData = {};
-	indexSubresourceData.pSysMem = indicies;
-	indexSubresourceData.SysMemPitch = 0;
-	indexSubresourceData.SysMemSlicePitch = 0; 
-
-	basicRenderer->GetDevice()->CreateBuffer(&indexBufferDesc, &indexSubresourceData, indexBuffer.GetAddressOf());
-
-	uint32_t stride = sizeof(VertexData); 
-	uint32_t offset = 0; 
-
-	basicRenderer->GetDeviceContext()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset); 
-	basicRenderer->GetDeviceContext()->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-
-
+	// BASIC RENDER LOOP
 	while (basicWindow->IsVisible())
 	{
+		gameTimer.Update();
+
+		// Diplay FPS every second 
+		static double fpsTimer = 0.0;
+		fpsTimer += gameTimer.GetDeltaTime();
+		if (fpsTimer >= 1.0)
+		{
+			printf("FPS: %f\n", gameTimer.GetAverageFPS());
+			fpsTimer = 0.0;
+		}
+
 		basicWindow->Run();
 		basicRenderer->ClearColor({ 0.5f, 0.2f, 0.6f, 1.0f });
+
+		basicCamera->HandleInput(basicWindow->GetWindowHandler(), gameTimer.GetDeltaTime());
+		basicCamera->UpdateMatrix(); 
+
 		basicRenderer->SetPipeline(); 
-		basicRenderer->Draw(3); 
+
+		for (auto& object : objects)
+		{
+			object->SetProps(); 
+			object->UpdateMatrix(basicCamera->GetViewMatrix(), basicCamera->GetProjectionMatrix());
+			basicRenderer->Draw(object->GetIndexCount());
+		}
+
 		basicRenderer->Present(); 
 	}
 
+	delete basicCamera;
 	delete basicWindow;
 	delete basicRenderer; 
 

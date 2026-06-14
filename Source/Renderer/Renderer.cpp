@@ -143,7 +143,7 @@ void Renderer::CreateInputLayout()
 {
 	D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = {
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"Color", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	mDevice->CreateInputLayout(inputElementDesc, 2, mVertexShaderBlob->GetBufferPointer(), mVertexShaderBlob->GetBufferSize(), mInputLayout.GetAddressOf());
@@ -154,8 +154,7 @@ void Renderer::SetPipeline()
 	mDeviceContext->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), nullptr); 
 	mDeviceContext->PSSetShader(mPixelShader.Get(), nullptr, 0); 
 	mDeviceContext->VSSetShader(mVertexShader.Get(), nullptr, 0); 
-	mDeviceContext->IASetInputLayout(mInputLayout.Get());
-	mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); 
+	mDeviceContext->IASetInputLayout(mInputLayout.Get()); 
 
 	D3D11_VIEWPORT viewport = {}; 
 	viewport.Width = (float)mWindow->GetSize().X; 
@@ -166,6 +165,7 @@ void Renderer::SetPipeline()
 	viewport.TopLeftY = 0.0f; 
 
 	mDeviceContext->RSSetViewports(1, &viewport); 
+	mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void Renderer::ClearColor(XMFLOAT4 color)
