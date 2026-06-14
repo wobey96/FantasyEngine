@@ -27,8 +27,10 @@ public:
 
 private: 
 	void CreateDevice();
+	void Check4XMSAAQualitySupport(); 
 	void CreateSwapchain();
 	void CreateRenderTargetView();
+	void CreateDepthStencilView(); 
 	void CreateShaders();
 	void CreateInputLayout();
 

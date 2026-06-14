@@ -1,54 +1,16 @@
 #include "Renderer.h"
 
 #include "Window/Window.h"
-
-#include <stdio.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
-std::string GetProjectDirectory()
-{
-	std::string fullPath(__FILE__); 
-	size_t found = fullPath.find_last_of("/\\"); 
-	if (found != std::string::npos)
-	{
-		std::string projectDir = fullPath.substr(0, found); 
-
-		found = projectDir.find_last_of("/\\"); 
-		if (found != std::string::npos)
-		{
-			return projectDir.substr(0, found + 1); 
-		}
-	}
-
-	return ""; 
-}
-
-std::string ReadHLSLFile(const std::string fileName)
-{
-	std::string absolutePath = GetProjectDirectory() + "Shaders\\" + fileName; 
-	std::ifstream file(absolutePath); 
-
-	if (!file.is_open())
-	{
-		std::cerr << "Error opening file: " << absolutePath << "\n"; 
-		return "";
-	}
-
-	std::stringstream buffer; 
-	buffer << file.rdbuf(); 
-	file.close(); 
-
-	return buffer.str();  
-}
+#include "Utility/Utility.h"
 
 Renderer::Renderer(Window* pWindow) : mWindow(pWindow), mDevice(nullptr), mDeviceContext(nullptr), 
 mSwapchain(nullptr), mRenderTargetView(nullptr)
 {
 	CreateDevice(); 
+	Check4XMSAAQualitySupport(); 
 	CreateSwapchain(); 
 	CreateRenderTargetView(); 
+	CreateDepthStencilView(); 
 	CreateShaders();
 	CreateInputLayout(); 
 }
@@ -66,6 +28,11 @@ void Renderer::CreateDevice()
 	{
 		printf("Successfully created d3d11 device and context! \n"); 
 	}
+}
+
+void Renderer::Check4XMSAAQualitySupport()
+{
+	printf(" Check for 4X MSAA quality support goes here! \n"); 
 }
 
 void Renderer::CreateSwapchain()
@@ -113,16 +80,23 @@ void Renderer::CreateRenderTargetView()
 	{
 		printf("Failed to create render target view! \n");
 		abort(); 
-	}
+	}	
 	else
 	{
 		printf("Successfully created render target view! \n"); 
 	}
 }
 
+void Renderer::CreateDepthStencilView()
+{
+	printf(" Create Depth Stencil View here! \n"); 
+}
+
 void Renderer::CreateShaders()
 {
 	ComPtr<ID3DBlob> ErrorBlob; 
+
+	// ------------------------------------ Pixel Shader ------------------------------------
 	const std::string pixelShaderCode = ReadHLSLFile("PixelShader.hlsl");
 
 	D3DCompile(pixelShaderCode.c_str(), pixelShaderCode.length(), nullptr, nullptr, nullptr, "main", "ps_5_0",
@@ -143,6 +117,7 @@ void Renderer::CreateShaders()
 		printf("Successfullly created pixel shader! \n"); 
 	}
 
+	// ------------------------------------ Vertex Shader ------------------------------------
 	const std::string vertexShaderCode = ReadHLSLFile("VertexShader.hlsl"); 
 
 	D3DCompile(vertexShaderCode.c_str(), vertexShaderCode.length(), nullptr, nullptr, nullptr, "main", "vs_5_0",
