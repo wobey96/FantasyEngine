@@ -13,8 +13,8 @@ public:
 	{
 		mView = XMMatrixIdentity();
 		mProjection = XMMatrixIdentity();
-		mSpeed = 0.1f;
-		mSensitivity = 100.0f; 
+		//mSpeed = 10.0f;
+		mSensitivity = 25.0f; 
 	}
 
 	void UpdateMatrix()
@@ -26,24 +26,26 @@ public:
 	XMMATRIX GetViewMatrix(){ return mView; }
 	XMMATRIX GetProjectionMatrix() { return mProjection; }
 
-	void HandleInput(GLFWwindow* window)
+	void HandleInput(GLFWwindow* window, float deltaTime)
 	{
+		printf("deltaTime: %f\n", deltaTime);  // Add this temporarily
+
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 		{
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			{
 				//printf("Pressing W Key"); 
-				mPosition.x = mPosition.x + mSpeed * mOrientation.x;
-				mPosition.y = mPosition.y + mSpeed * mOrientation.y;
-				mPosition.z = mPosition.z + mSpeed * mOrientation.z;
+				mPosition.x = mPosition.x + mSpeed * mOrientation.x * deltaTime;
+				mPosition.y = mPosition.y + mSpeed * mOrientation.y * deltaTime;
+				mPosition.z = mPosition.z + mSpeed * mOrientation.z * deltaTime;
 			}
 
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			{
 				//printf("Pressing S Key");
-				mPosition.x = mPosition.x - mSpeed * mOrientation.x;
-				mPosition.y = mPosition.y - mSpeed * mOrientation.y;
-				mPosition.z = mPosition.z - mSpeed * mOrientation.z;
+				mPosition.x = mPosition.x - mSpeed * mOrientation.x * deltaTime;
+				mPosition.y = mPosition.y - mSpeed * mOrientation.y * deltaTime;
+				mPosition.z = mPosition.z - mSpeed * mOrientation.z * deltaTime;
 			}
 
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -53,9 +55,9 @@ public:
 				XMFLOAT3 rightFloat; 
 				XMStoreFloat3(&rightFloat, right);
 
-				mPosition.x = mPosition.x + mSpeed * rightFloat.x;
-				mPosition.y = mPosition.y + mSpeed * rightFloat.y;
-				mPosition.z = mPosition.z + mSpeed * rightFloat.z;
+				mPosition.x = mPosition.x + mSpeed * rightFloat.x * deltaTime;
+				mPosition.y = mPosition.y + mSpeed * rightFloat.y * deltaTime;
+				mPosition.z = mPosition.z + mSpeed * rightFloat.z * deltaTime;
 			}
 
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
@@ -65,37 +67,36 @@ public:
 				XMFLOAT3 rightFloat;
 				XMStoreFloat3(&rightFloat, right);
 
-				mPosition.x = mPosition.x - mSpeed * rightFloat.x;
-				mPosition.y = mPosition.y - mSpeed * rightFloat.y;
-				mPosition.z = mPosition.z - mSpeed * rightFloat.z;
+				mPosition.x = mPosition.x - mSpeed * rightFloat.x * deltaTime;
+				mPosition.y = mPosition.y - mSpeed * rightFloat.y * deltaTime;
+				mPosition.z = mPosition.z - mSpeed * rightFloat.z * deltaTime;
 			}
 
 			if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 			{
 				//printf("Pressing Space Bar Key");
-				mPosition.x = mPosition.x + mSpeed * mUp.x;
-				mPosition.y = mPosition.y + mSpeed * mUp.y;
-				mPosition.z = mPosition.z + mSpeed * mUp.z;
+				mPosition.x = mPosition.x + mSpeed * mUp.x * deltaTime;
+				mPosition.y = mPosition.y + mSpeed * mUp.y * deltaTime;
+				mPosition.z = mPosition.z + mSpeed * mUp.z * deltaTime;
 			}
 
 			if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 			{
 				//printf("Pressing left ctrl Key");
-				mPosition.x = mPosition.x - mSpeed * mUp.x;
-				mPosition.y = mPosition.y - mSpeed * mUp.y;
-				mPosition.z = mPosition.z - mSpeed * mUp.z;
+				mPosition.x = mPosition.x - mSpeed * mUp.x * deltaTime;
+				mPosition.y = mPosition.y - mSpeed * mUp.y * deltaTime;
+				mPosition.z = mPosition.z - mSpeed * mUp.z * deltaTime;
 			}
 
 			if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 			{
 				//printf("Pressing left shift Key");
-				mSpeed = 0.4f;
+				mSpeed = 10.0f;
 			}
-
-			else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+			else
 			{
 
-				mSpeed = 0.1f; 
+				mSpeed = 5.0f; 
 			}
 
 			// Hides mouse cursor 
@@ -114,25 +115,28 @@ public:
 			// Fetches the coordinates of the cursor
 			glfwGetCursorPos(window, &mouseX, &mouseY);	
 
-			// Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen	
-			// and then "transforms" them into degrees
-			float rotX = mSensitivity * (float)(mouseY - (mWindowSize.y / 2)) / mWindowSize.y;
-			float rotY = mSensitivity * (float)(-mouseX - (mWindowSize.x / 2)) / mWindowSize.x;
-
-			XMFLOAT3 tempAxis;
-			XMStoreFloat3(&tempAxis, XMVector3Normalize(XMVector3Cross(XMLoadFloat3(&mOrientation), XMLoadFloat3(&mUp))));
-			// Calculates upcoming vertical change in the orientation
-			XMFLOAT3 newOriendation = RotateVector(mOrientation, -rotX, tempAxis);
-
-			// Decides whether or not the next vertical orientation is legal or not
-			if (abs(XMVectorGetX(XMVector3AngleBetweenNormals(XMLoadFloat3(&newOriendation), XMLoadFloat3(&mUp))) - XMConvertToRadians(90.0f)) <= XMConvertToRadians(85.0f))
+			if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
 			{
-				mOrientation = newOriendation;
+				// Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen	
+				// and then "transforms" them into degrees
+				float rotX = mSensitivity * (float)(mouseY - (mWindowSize.y / 2)) / mWindowSize.y * deltaTime;
+				float rotY = mSensitivity * (float)(-mouseX - (mWindowSize.x / 2)) / mWindowSize.x * deltaTime;
+
+				XMFLOAT3 tempAxis;
+				XMStoreFloat3(&tempAxis, XMVector3Normalize(XMVector3Cross(XMLoadFloat3(&mOrientation), XMLoadFloat3(&mUp))));
+				// Calculates upcoming vertical change in the orientation
+				XMFLOAT3 newOriendation = RotateVector(mOrientation, -rotX, tempAxis);
+
+				// Decides whether or not the next vertical orientation is legal or not
+				if (abs(XMVectorGetX(XMVector3AngleBetweenNormals(XMLoadFloat3(&newOriendation), XMLoadFloat3(&mUp))) - XMConvertToRadians(90.0f)) <= XMConvertToRadians(85.0f))
+				{
+					mOrientation = newOriendation;
+				}
+
+				// Rotates the Orientation left and right 
+				mOrientation = RotateVector(mOrientation, -rotY, mUp);
 			}
-
-			// Rotates the Orientation left and right 
-			mOrientation = RotateVector(mOrientation, -rotY, mUp);
-
+			
 			// Sets mouse cursor to the middle of screen so that it doesn't end up roaming around
 			glfwSetCursorPos(window, (mWindowSize.x / 2), (mWindowSize.y / 2)); 
 		}

@@ -75,7 +75,9 @@ void Object::SetProps()
 
 void Object::UpdateMatrix(XMMATRIX view, XMMATRIX projection)
 {
-	mWorldData.Rotation.z += 0.1f; 
+	printf("Cube Position: (%.2f, %.2f, %.2f)\n",
+		mWorldData.Position.x, mWorldData.Position.y, mWorldData.Position.z);
+	//mWorldData.Rotation.z += 0.1f; 
 	mTransformData.World = XMMatrixTranspose(XMMatrixScaling(mWorldData.Scale.x, mWorldData.Scale.y, mWorldData.Scale.z) *
 		XMMatrixRotationRollPitchYaw(XMConvertToRadians(mWorldData.Rotation.x), XMConvertToRadians(mWorldData.Rotation.y), XMConvertToRadians(mWorldData.Rotation.z)) *
 		XMMatrixTranslation(mWorldData.Position.x, mWorldData.Position.y, mWorldData.Position.z));	

@@ -3,6 +3,7 @@
 
 #include "Object/Object.h"
 #include "Object/Camera.h"
+#include "Object/Timer.h"
 
 #include <vector>
 
@@ -70,13 +71,27 @@ int main()
 	Object* cube = new Object(vertices1, indicies1);
 	objects.push_back(cube);
 
+	// Timer for calc delta time and elapsed time 
+	Timer gameTimer; 
+
 	// BASIC RENDER LOOP
 	while (basicWindow->IsVisible())
 	{
+		gameTimer.Update();
+
+		// Diplay FPS every second 
+		static double fpsTimer = 0.0;
+		fpsTimer += gameTimer.GetDeltaTime();
+		if (fpsTimer >= 1.0)
+		{
+			printf("FPS: %f\n", gameTimer.GetAverageFPS());
+			fpsTimer = 0.0;
+		}
+
 		basicWindow->Run();
 		basicRenderer->ClearColor({ 0.5f, 0.2f, 0.6f, 1.0f });
 
-		basicCamera->HandleInput(basicWindow->GetWindowHandler());
+		basicCamera->HandleInput(basicWindow->GetWindowHandler(), gameTimer.GetDeltaTime());
 		basicCamera->UpdateMatrix(); 
 
 		basicRenderer->SetPipeline(); 
