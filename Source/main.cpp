@@ -81,11 +81,18 @@ int main()
 
 		// Diplay FPS every second 
 		static double fpsTimer = 0.0;
+		static double avgFPS = 0.0;
+
 		fpsTimer += gameTimer.GetDeltaTime();
 		if (fpsTimer >= 1.0)
 		{
-			printf("FPS: %f\n", gameTimer.GetAverageFPS());
+			avgFPS = gameTimer.GetAverageFPS();
+			printf("FPS: %f\n", avgFPS);
 			fpsTimer = 0.0;
+		}
+		else
+		{
+			printf("FPS: %f\n", avgFPS); 
 		}
 
 		basicWindow->Run();
