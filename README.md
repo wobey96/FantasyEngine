@@ -6,7 +6,7 @@ I called it Fantasy Engine because graphics and engine programming allows you to
 
 ## Download 
 
-## Render Samples 
+## Render Samples and Demos
 
 ![Camera and Cube](Screenshots/Manual_Cube_No_Texture.png)
 
@@ -16,9 +16,9 @@ Figure 2: Camera and Cube
 
 Figure 1: Triangle 
 
-## All Demos: 
 [Link to Feature Playlist](https://www.youtube.com/playlist?list=PLahcOfCTPH8r57gGlewJuTvBM6HMdRo4Z)
 
+[Link to all render samples and demos](https://github.com/wobey96/FantasyEngine/wiki/All-Screenshots-and-Demos)
 ## Main Features 
 
 ### Rendering 
