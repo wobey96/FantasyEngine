@@ -9,9 +9,11 @@ I called it Fantasy Engine because graphics and engine programming allows you to
 ## Render Samples 
 
 ![Camera and Cube](Screenshots/Manual_Cube_No_Texture.png)
+
 Figure 2: Camera and Cube
 
 ![Camera and Cube](Screenshots/Manual_Triangle_No_Texture.png)
+
 Figure 1: Triangle 
 
 ## All Demos: 
