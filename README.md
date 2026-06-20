@@ -8,6 +8,15 @@ I called it Fantasy Engine because graphics and engine programming allows you to
 
 ## Render Samples 
 
+![Camera and Cube](Screenshots/Manual_Cube_No_Texture.png)
+Figure 2: Camera and Cube
+
+![Camera and Cube](Screenshots/Manual_Triangle_No_Texture.png)
+Figure 1: Triangle 
+
+## All Demos: 
+[Link to Feature Playlist](https://www.youtube.com/playlist?list=PLahcOfCTPH8r57gGlewJuTvBM6HMdRo4Z)
+
 ## Main Features 
 
 ### Rendering 
@@ -28,4 +37,5 @@ I called it Fantasy Engine because graphics and engine programming allows you to
 
 ### Graphics Programming Community <3
 
-Special Shout-out to Angel Ortiz and Kostas Anagnostou. They were the ones who encouraged me to start this project and helped me a lot with their knowledge and experience in graphics programming!
+Special shout-out to Angel Ortiz and Kostas Anagnostou. 
+They were the first people I reached out to about graphics programming. Very helpful and supportive! 
