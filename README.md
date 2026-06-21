@@ -1,8 +1,13 @@
-# Fantasy Engine
-Fantasy Engine 
+# Fantasy Engine 
 
 Fantasy Engine is a rendering engine build on top of DirectX 11. It's main goal is to show my understanding of the components for a rendering engine.
 I called it Fantasy Engine because graphics and engine programming allows you to create your own fantasy world :)
+
+## TODO (as of 06/20/2026):
+- [ ] Implement Free Flight Camera LookAt() functionality
+- [ ] Add Textures to Cube 
+- [ ] Finalize Engine Architecture 
+- [ ] Add ImGui for UI/Engine Editor options 
 
 ## Download 
 
