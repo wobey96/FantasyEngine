@@ -128,6 +128,7 @@ public:
 				XMFLOAT3 newOriendation = RotateVector(mOrientation, -rotX, tempAxis);
 
 				// Decides whether or not the next vertical orientation is legal or not
+				// 
 				if (abs(XMVectorGetX(XMVector3AngleBetweenNormals(XMLoadFloat3(&newOriendation), XMLoadFloat3(&mUp))) - XMConvertToRadians(90.0f)) <= XMConvertToRadians(85.0f))
 				{
 					mOrientation = newOriendation;
@@ -167,7 +168,7 @@ private:
 	{
 		XMVECTOR xmVector = XMLoadFloat3(&vector);
 		XMVECTOR xmAxis = XMLoadFloat3(&axis);
-		XMMATRIX rotationMatrix = XMMatrixRotationAxis(xmAxis, XMConvertToRadians(angle));
+		XMMATRIX rotationMatrix = XMMatrixRotationAxis(xmAxis, XMConvertToRadians(angle));  
 		xmVector = XMVector3TransformCoord(xmVector, rotationMatrix);
 		XMStoreFloat3(&vector, xmVector);
 		return vector;
