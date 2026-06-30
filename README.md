@@ -33,6 +33,10 @@ Figure 1: Triangle
 
 ## Engine Architecture
 
+![Engine Arch](Screenshots/Engine_Arch.png)
+
+Figure 1: Rendering Engine Architecture 
+
 ## Repository Structure
 
 ## Dependencies 
